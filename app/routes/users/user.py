@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, make_response
 from app.utils import is_password_valid, is_username_valid
-from app.uploads import save_image
+from app.image_func import save_image
 from app.models.users import User
 from app.models.roles import Role
 from app.extension import db, bcrypt
