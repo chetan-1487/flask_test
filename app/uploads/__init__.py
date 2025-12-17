@@ -1,0 +1,1 @@
+from app.uploads.photo import save_image

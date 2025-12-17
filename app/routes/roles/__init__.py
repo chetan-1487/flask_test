@@ -1,0 +1,1 @@
+from app.routes.roles.role import role_bp
