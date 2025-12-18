@@ -6,6 +6,7 @@ from app.models.roles import Role
 from app.extension import db, bcrypt
 from flask_jwt_extended import create_access_token, verify_jwt_in_request, get_jwt, get_jwt_identity
 from functools import wraps
+from flask.wrappers import Response
 
 user_bp = Blueprint("users", __name__)
 
@@ -33,7 +34,7 @@ def user_role(*roles):
 
 
 @user_bp.route("/create", methods=["POST"])
-def create():
+def create() -> Response:
 
   first_name = request.form.get("first_name")
   last_name = request.form.get("last_name")
@@ -42,7 +43,7 @@ def create():
   password = request.form.get("password")
   status = request.form.get("status")
   role = request.form.get("role")
-  profile_image = request.files["profile_image_url"]
+  profile_image = request.files.get("profile_image_url")
 
   
   if User.query.filter_by(email=email).first():
@@ -78,7 +79,7 @@ def create():
 
 
 @user_bp.route("/login", methods=["POST"])
-def login():
+def login() -> Response:
   email = request.form.get("email")
   password = request.form.get("password")
 
@@ -99,7 +100,7 @@ def login():
   }})
 
 @user_bp.route("/change-password", methods=["PUT"])
-def change_password():
+def change_password() -> Response:
   email = request.form.get("email")
   current_password = request.form.get("current_password")
   new_password = request.form.get("new_password")
@@ -125,7 +126,7 @@ def change_password():
 
 
 @user_bp.route("/all", methods=["GET"])
-def all():
+def all() -> Response:
     roles = request.args.getlist("roles")   
     status = request.args.get("status")    
     page = int(request.args.get("page", 0))
@@ -160,7 +161,7 @@ def all():
 
 @user_bp.route("/users/<int:id>", methods=["GET"])
 @user_role("admin", "manager")
-def users(id):
+def users(id: int) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -176,7 +177,7 @@ def users(id):
 
 @user_bp.route("/update/users/<int:id>", methods=["PUT"])
 @user_role("admin", "manager")
-def update_users(id):
+def update_users(id: int) -> Response:
 
   first_name = request.form.get("first_name")
   last_name = request.form.get("last_name")
@@ -214,7 +215,7 @@ def update_users(id):
 @user_bp.route("/users/<int:id>/archive", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_archive(id):
+def user_archive(id: int) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -232,7 +233,7 @@ def user_archive(id):
 @user_bp.route("/users/<int:id>/restore", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_restore(id):
+def user_restore(id : int) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:

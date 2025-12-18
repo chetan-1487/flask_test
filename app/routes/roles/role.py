@@ -3,6 +3,7 @@ from app.models.roles import Role
 import os
 from dotenv import load_dotenv
 from app.extension import db
+from flask.wrappers import Response
 
 
 load_dotenv()
@@ -11,7 +12,7 @@ role_bp = Blueprint("roles", __name__)
 
 
 @role_bp.route("/all")
-def all():
+def all() -> Response:
 
   pagiation = int(os.getenv("pagination"), 10)
 
@@ -34,7 +35,7 @@ def all():
 
 
 @role_bp.route("/roles/<int:id>", methods=["DELETE"])
-def delete_role(id):
+def delete_role(id: int) -> Response:
   role = Role.query.filter_by(id==id).first()
 
   if role.user_id:

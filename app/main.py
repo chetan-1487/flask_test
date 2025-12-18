@@ -12,7 +12,7 @@ import os
 load_dotenv()
 
 
-def createApp(testing=False):
+def createApp(testing=False) -> Flask:
   app = Flask(__name__)
 
   app.config.from_object(Config)
