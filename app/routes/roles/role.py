@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from app.extension import db
 from flask.wrappers import Response
-
+from uuid import UUID
 
 load_dotenv()
 
@@ -34,8 +34,8 @@ def all() -> Response:
   }}), 200
 
 
-@role_bp.route("/roles/<str:id>", methods=["DELETE"])
-def delete_role(id: str) -> Response:
+@role_bp.route("/roles/<uuid:id>", methods=["DELETE"])
+def delete_role(id: UUID) -> Response:
   role = Role.query.filter_by(id==id).first()
 
   if role.user_id:

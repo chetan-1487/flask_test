@@ -7,6 +7,7 @@ from app.extension import db, bcrypt
 from flask_jwt_extended import create_access_token, verify_jwt_in_request, get_jwt, get_jwt_identity
 from functools import wraps
 from flask.wrappers import Response
+from uuid import UUID
 
 user_bp = Blueprint("users", __name__)
 
@@ -159,9 +160,9 @@ def all() -> Response:
     }), 200
 
 
-@user_bp.route("/users/<str:id>", methods=["GET"])
+@user_bp.route("/users/<uuid:id>", methods=["GET"])
 @user_role("admin", "manager")
-def users(id: str) -> Response:
+def users(id: UUID) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -175,9 +176,9 @@ def users(id: str) -> Response:
   }}), 200
   
 
-@user_bp.route("/update/users/<str:id>", methods=["PUT"])
+@user_bp.route("/update/users/<uuid:id>", methods=["PUT"])
 @user_role("admin", "manager")
-def update_users(id: str) -> Response:
+def update_users(id: UUID) -> Response:
 
   first_name = request.form.get("first_name")
   last_name = request.form.get("last_name")
@@ -212,10 +213,10 @@ def update_users(id: str) -> Response:
   }}), 200
   
 
-@user_bp.route("/users/<str:id>/archive", methods=["PUT"])
+@user_bp.route("/users/<uuid:id>/archive", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_archive(id: str) -> Response:
+def user_archive(id: UUID) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -230,10 +231,10 @@ def user_archive(id: str) -> Response:
   return jsonify({"message":"set status successfully"})
 
 
-@user_bp.route("/users/<str:id>/restore", methods=["PUT"])
+@user_bp.route("/users/<uuid:id>/restore", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_restore(id : str) -> Response:
+def user_restore(id : UUID) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
