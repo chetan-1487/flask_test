@@ -24,11 +24,11 @@ def createApp(testing=False) -> Flask:
   migrate.init_app(app,db)
   jwtmanager.init_app(app)
 
-  app.register_blueprint(user_bp)
-  app.register_blueprint(role_bp)
-  app.register_blueprint(order_bp)
-  app.register_blueprint(product_bp)
-  app.register_blueprint(orderitems_bp)
+  app.register_blueprint(user_bp, url_prefix="/users")
+  app.register_blueprint(role_bp, url_prefix="/roles")
+  app.register_blueprint(order_bp, url_prefix="/orders")
+  app.register_blueprint(product_bp, url_prefix="/products")
+  app.register_blueprint(orderitems_bp, url_prefix="/orderitems")
 
   return app
 
