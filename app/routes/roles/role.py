@@ -34,8 +34,8 @@ def all() -> Response:
   }}), 200
 
 
-@role_bp.route("/roles/<int:id>", methods=["DELETE"])
-def delete_role(id: int) -> Response:
+@role_bp.route("/roles/<int:str>", methods=["DELETE"])
+def delete_role(id: str) -> Response:
   role = Role.query.filter_by(id==id).first()
 
   if role.user_id:

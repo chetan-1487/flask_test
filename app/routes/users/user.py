@@ -159,9 +159,9 @@ def all() -> Response:
     }), 200
 
 
-@user_bp.route("/users/<int:id>", methods=["GET"])
+@user_bp.route("/users/<int:str>", methods=["GET"])
 @user_role("admin", "manager")
-def users(id: int) -> Response:
+def users(id: str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -212,10 +212,10 @@ def update_users(id: int) -> Response:
   }}), 200
   
 
-@user_bp.route("/users/<int:id>/archive", methods=["PUT"])
+@user_bp.route("/users/<int:str>/archive", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_archive(id: int) -> Response:
+def user_archive(id: str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -230,10 +230,10 @@ def user_archive(id: int) -> Response:
   return jsonify({"message":"set status successfully"})
 
 
-@user_bp.route("/users/<int:id>/restore", methods=["PUT"])
+@user_bp.route("/users/<int:str>/restore", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_restore(id : int) -> Response:
+def user_restore(id : str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
