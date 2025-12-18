@@ -159,7 +159,7 @@ def all() -> Response:
     }), 200
 
 
-@user_bp.route("/users/<int:str>", methods=["GET"])
+@user_bp.route("/users/<str:id>", methods=["GET"])
 @user_role("admin", "manager")
 def users(id: str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
@@ -175,9 +175,9 @@ def users(id: str) -> Response:
   }}), 200
   
 
-@user_bp.route("/update/users/<int:id>", methods=["PUT"])
+@user_bp.route("/update/users/<str:id>", methods=["PUT"])
 @user_role("admin", "manager")
-def update_users(id: int) -> Response:
+def update_users(id: str) -> Response:
 
   first_name = request.form.get("first_name")
   last_name = request.form.get("last_name")
@@ -212,7 +212,7 @@ def update_users(id: int) -> Response:
   }}), 200
   
 
-@user_bp.route("/users/<int:str>/archive", methods=["PUT"])
+@user_bp.route("/users/<str:id>/archive", methods=["PUT"])
 @user_role("admin", "manager")
 
 def user_archive(id: str) -> Response:
@@ -230,7 +230,7 @@ def user_archive(id: str) -> Response:
   return jsonify({"message":"set status successfully"})
 
 
-@user_bp.route("/users/<int:str>/restore", methods=["PUT"])
+@user_bp.route("/users/<str:id>/restore", methods=["PUT"])
 @user_role("admin", "manager")
 
 def user_restore(id : str) -> Response:
