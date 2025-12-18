@@ -160,9 +160,9 @@ def all() -> Response:
     }), 200
 
 
-@user_bp.route("/users/<uuid:id>", methods=["GET"])
+@user_bp.route("/users/<id>", methods=["GET"])
 @user_role("admin", "manager")
-def users(id: UUID) -> Response:
+def users(id: str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -176,21 +176,21 @@ def users(id: UUID) -> Response:
   }}), 200
   
 
-@user_bp.route("/update/users/<uuid:id>", methods=["PUT"])
+@user_bp.route("/update/users/<id>", methods=["PUT"])
 @user_role("admin", "manager")
-def update_users(id: UUID) -> Response:
+def update_users(id: str) -> Response:
 
   first_name = request.form.get("first_name")
   last_name = request.form.get("last_name")
   status = request.form.get("status")
-  profile_image_url = request.files["profile_image_url"]
+  profile_image = request.files.get("profile_image_url")
 
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
     return jsonify({"message":"user doesnot exist"}), 404
 
-  image_url = save_image(profile_image_url)
+  image_url = save_image(profile_image) if profile_image else None
 
   obj = {
     "first_name" : first_name,
@@ -213,10 +213,10 @@ def update_users(id: UUID) -> Response:
   }}), 200
   
 
-@user_bp.route("/users/<uuid:id>/archive", methods=["PUT"])
+@user_bp.route("/users/<id>/archive", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_archive(id: UUID) -> Response:
+def user_archive(id: str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
@@ -231,10 +231,10 @@ def user_archive(id: UUID) -> Response:
   return jsonify({"message":"set status successfully"})
 
 
-@user_bp.route("/users/<uuid:id>/restore", methods=["PUT"])
+@user_bp.route("/users/<id>/restore", methods=["PUT"])
 @user_role("admin", "manager")
 
-def user_restore(id : UUID) -> Response:
+def user_restore(id : str) -> Response:
   user_detail = User.query.filter_by(id=id).first()
 
   if not user_detail:
